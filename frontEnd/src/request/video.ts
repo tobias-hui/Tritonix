@@ -1,13 +1,13 @@
 import instance from "./instance";
 
 
-export async function getRecommendVideo({ pageCount, pageSize }: { pageCount: number; pageSize: number }) {
+export async function getRecommendVideo({ currentPage, currentPageSize }: { currentPage: number; currentPageSize: number }) {
   const res = await instance.get('/mock/recommendVideo', {
-    data: {
-      pageCount, pageSize
+    params: {
+      currentPage, currentPageSize
     }
   })
-  console.log('getRecommendVideo:', res);
+  console.log('getRecommendVideo', res);
 
   return res
 }
