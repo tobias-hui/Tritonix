@@ -1,6 +1,8 @@
 import Mock from 'mockjs'
 
 import { getLocalVideos } from './resource'
+import getUid from '@/utils/getUid'
+import { RecommendVideo } from '@/types/video'
 
 Mock.mock(/mock\/recommendVideo/, 'get', options => {
   const { url } = options
@@ -9,10 +11,7 @@ Mock.mock(/mock\/recommendVideo/, 'get', options => {
   const videos = getLocalVideos(currentPage, currentPageSize)
   return Mock.mock({
     code: 200,
-    data: {
-      total: 16,
-      videos
-    },
+    data: videos,
     msg: ''
   })
 })

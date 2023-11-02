@@ -15,20 +15,28 @@
 // import video14 from "@/assets/video/qq14.mp4"
 // import video15 from "@/assets/video/qq15.mp4"
 
+import { RecommendVideo, VideoInfo } from "@/types/video"
+import getUid from "@/utils/getUid"
 
-export function getLocalVideos(currentPage: number, currentPageSize: number) {
-  const videos:string[] = []
-  
-  for (let i=0;i<16;i++){
-    videos.push(`/src/assets/video/qq${i}.mp4`)
+
+export function getLocalVideos(currentPage: number, currentPageSize: number): RecommendVideo {
+  const videos: VideoInfo[] = []
+
+  for (let i = 0; i < 16; i++) {
+    videos.push({
+      id: getUid(),
+      url: `/src/assets/video/qq${i}.mp4`
+    })
   }
-  console.log(videos);
   // [start,end)
   const start = (currentPage - 1) * currentPageSize
   const end = start + currentPageSize
-  
-  const part=videos.slice(start,end)
-  console.log('part',part,start,end);
-  
-  return part
+
+  const part = videos.slice(start, end)
+  // console.log('part', part, start, end);
+
+  return {
+    total: 16,
+    videos: part
+  }
 }
