@@ -1,4 +1,4 @@
-import { ref, reactive, Ref, onMounted } from "vue";
+import { ref, reactive, Ref, onMounted, watch } from "vue";
 type ServiceFn<T> = (currentPage: number, currentPageSize: number) => Promise<T[]>
 type Options = {
   defaultPageSize?: number
@@ -21,15 +21,30 @@ export default function usePagination<T>(serviceFn: ServiceFn<T>, { defaultPage 
     totalPage: 0,
     changeCurrent
   })
-  onMounted(async()=>{
-    try {
-      const res=await serviceFn(defaultPage,defaultPageSize)
-      Object.assign(data,res)
-    }catch(err){
-      console.log('usePagination',err);
-    }
+  onMounted(async () => {
+    handleService()
   })
+  watch(() => pagination.current, (curr, prev) => {
+    handleService()
+  })
+
+  async function handleService() {
+    loading.value = true
+    try {
+      const res = await serviceFn(pagination.current, pagination.pageSize)
+      Object.assign(data, res)
+    } catch (err) {
+      console.log('usePagination', err);
+    } finally {
+      loading.value = false
+    }
+  }
+
   function changeCurrent(current: number) {
 
+  }
+  return {
+    data, loading,
+    pagination
   }
 }

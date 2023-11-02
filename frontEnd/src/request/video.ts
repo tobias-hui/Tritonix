@@ -1,5 +1,6 @@
 import instance from "./instance";
 
+import { RecommendVideo } from "@/types/video";
 
 export async function getRecommendVideo({ currentPage, currentPageSize }: { currentPage: number; currentPageSize: number }) {
   const res = await instance.get('/mock/recommendVideo', {
@@ -9,5 +10,5 @@ export async function getRecommendVideo({ currentPage, currentPageSize }: { curr
   })
   console.log('getRecommendVideo', res);
 
-  return res
+  return res.data.data as RecommendVideo
 }
