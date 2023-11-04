@@ -128,3 +128,53 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# .gitignore for FastAPI
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.pyc
+*.so
+
+# Virtual environment
+venv/
+*.venv
+.env
+
+# Database files (if it's SQLite)
+*.db
+*.sqlite3
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints
+
+# Pytest
+.pytest_cache/
+
+# VS Code settings
+.vscode/
+
+# Logs
+logs
+*.log
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.tox/
+
+# dist / build
+dist/
+build/
+*.egg-info/
+*.eggs
+
+# IDE/Editor folders
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
