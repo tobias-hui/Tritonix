@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import VideoPlayer from "../video/VideoPlayer.vue";
+// type
+import { SlideState } from "./type/slide";
+
 const props = defineProps<{
-  sliderIndex: number;
   src: string;
-  // bgc: string
-  size: {
-    width: number;
-    height: number;
-  };
-  position: {
-    top: number;
-    left: number;
-  };
+  index: number;
+  // mouseDownTimeStamp:number
+  slideState: SlideState;
   // transitionY: number
 }>();
-console.log("slide-item", props);
+console.log("slide-item", props, props.index);
 function getRandomColor() {
   var r = Math.floor(Math.random() * 256); // 生成 0 到 255 之间的随机整数
   var g = Math.floor(Math.random() * 256);
@@ -31,27 +27,17 @@ const colorRef = ref(getRandomColor());
     class="swiper-slide"
     :style="{
       backgroundColor: colorRef,
-      width: `${size.width}px`,
-      height: `${size.height}px`,
-      top: `${position.top}px`,
-      left: `${position.left}px`,
-      // transform: `translate3d(0,${transitionY}px,0)`
+      width: `${slideState.wrapper.width}px`,
+      height: `${slideState.wrapper.height}px`,
+      top: `${index * slideState.wrapper.height}px`,
+      left: `${0}px`,
     }"
   >
-    <!-- <div>
-
-      {{ sliderIndex }}
-    </div>
-    -------
-    <div>
-
-      {{ src }}
-    </div> -->
-    <!-- <video :src="qq1" style="width: 100%;height: 100%;"></video> -->
     <video-player
+      :active="index === slideState.currentIndex"
       :options="{
-        autoplay: true,
-        controls: true,
+        autoplay: index === 0,
+        // controls: true,
         fill: true,
         sources: [
           {
@@ -60,6 +46,7 @@ const colorRef = ref(getRandomColor());
           },
         ],
       }"
+      :slide-state="slideState"
     ></video-player>
   </div>
 </template>

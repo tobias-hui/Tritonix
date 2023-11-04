@@ -22,6 +22,7 @@ import { useEventListener, useEventBus } from "@vueuse/core";
 import { getRecommendVideo } from "@/request";
 // type
 import { RecommendVideo, VideoInfo } from "@/types/video";
+import { SlideState } from "./type/slide";
 
 const eventBus = useEventBus("swiper");
 // eventBus.on(()=>{
@@ -48,6 +49,7 @@ const slideState = reactive({
   },
   transition: { x: 0, y: 0 },
   durationTime: 0,
+  mouseDownTimeStamp: 0,
 });
 const dataList = reactive<VideoInfo[]>([]);
 const sliderMap = new Map<number, App<Element>>();
@@ -55,15 +57,13 @@ const slideListRef = ref<HTMLDivElement | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const arr = reactive([]);
 
-watch(dataList, (newVal, oldVal) => {
-  console.log("watch", wrapperRef.value && slideListRef.value);
-  // for (let i = 0; i < testCount; i++) {
-  //   const e = createEl(i, qq1)
-  //   slideListRef.value?.appendChild(e)
-  //   console.log('finish');
-
-  // }
-});
+watch(
+  () => slideState.currentIndex,
+  (newVal, oldVal) => {
+    // console.log('watch',newVal, oldVal);
+    changeDistance(newVal);
+  }
+);
 onMounted(async () => {
   if (!(wrapperRef.value && slideListRef.value)) return;
   slideState.wrapper.width = wrapperRef.value.offsetWidth;
@@ -77,34 +77,27 @@ onMounted(async () => {
   const newData = res.videos.map((item) => {});
   Object.assign(dataList, res.videos);
 });
-const { swiperRef } = useSwiper();
 
-function handleClick(
-  swiper: Swiper,
-  e: MouseEvent | TouchEvent | PointerEvent
-) {
-  // e.stopPropagation()
-  console.log("click", swiper, e);
-  // e.stopPropagation()
-}
-function handleScroll() {
-  console.log("scroll");
-}
 function handleMouseDown(e: MouseEvent) {
+  console.log("mouseDown", e.timeStamp);
+  slideState.mouseDownTimeStamp = e.timeStamp;
   slideState.isMouseDown = true;
   slideState.durationTime = 0;
   const { pageX, pageY } = e;
   slideState.start.x = pageX;
   slideState.start.y = pageY;
 
-  console.log("mouseDown", e, pageX, pageY);
+  // console.log("mouseDown", e, pageX, pageY);
 }
 function handleMouseUp(e: MouseEvent) {
+  console.log("mouseUp", e.timeStamp);
+
+  e.preventDefault();
   slideState.isMouseDown = false;
   slideState.durationTime = 0.3;
   // console.log('mouseUp', e);
   const dy = slideState.transition.y - slideState.lastTransition.y;
-  console.log("change", dy);
+  // console.log("change", dy);
   if (canSlide(dy, 50)) {
     if (dy > 0) {
       // 列表向下
@@ -114,20 +107,24 @@ function handleMouseUp(e: MouseEvent) {
       slideState.currentIndex -= changeIndex;
     } else {
       // 向上
-      const changeIndex = -Math.floor(dy / slideState.wrapper.height);
-      // console.log('changeIndex', changeIndex);
-      slideState.currentIndex += changeIndex;
+      if (slideState.currentIndex === dataList.length - 1) {
+        changeDistance(slideState.currentIndex);
+      } else {
+        const changeIndex = -Math.floor(dy / slideState.wrapper.height);
+        // console.log('changeIndex', changeIndex);
+        slideState.currentIndex += changeIndex;
+      }
     }
+  } else {
+    changeDistance(slideState.currentIndex);
   }
-  changeDistance();
 
-  slideState.lastTransition.x = slideState.transition.x;
-  slideState.lastTransition.y = slideState.transition.y;
   // console.log(slideState.lastTransition);
 }
 
 function handleMouseMove(e: MouseEvent) {
   if (!slideState.isMouseDown) return;
+  e.preventDefault();
   // console.log('mouseMove', e);
   // 当前位置
   const { pageX, pageY } = e;
@@ -147,35 +144,38 @@ function handleMouseMove(e: MouseEvent) {
   slideState.transition.y += dy;
   // console.log('transition-y', slideState.transition.y);
 }
+function handleKeyDown(e: KeyboardEvent) {
+  // if(!slideListRef.value )return;
+  e.preventDefault();
+  console.log(e, slideState.currentIndex);
+  const { code } = e;
+  if (code === "ArrowDown") {
+    if (dataList.length - 1 > slideState.currentIndex) {
+      slideState.currentIndex++;
+    }
+  } else if (code === "ArrowUp") {
+    if (slideState.currentIndex === 0) return;
+    slideState.currentIndex--;
+  }
+}
 
 function canSlide(moveValue: number, judgeValue: number) {
-  if (Math.abs(moveValue) > judgeValue) {
+  if (
+    Math.abs(moveValue) > judgeValue
+    // dataList.length - 1 > slideState.currentIndex
+  ) {
     return true;
   } else return false;
 }
-function getDistance() {
-  return -slideState.currentIndex * slideState.wrapper.height;
+function getDistance(index: number) {
+  return -index * slideState.wrapper.height;
 }
-function changeDistance() {
-  const distance = getDistance();
+function changeDistance(index: number) {
+  const distance = getDistance(index);
   slideState.transition.y = distance;
+  slideState.lastTransition.x = slideState.transition.x;
+  slideState.lastTransition.y = slideState.transition.y;
 }
-
-/* function createEl(sliderIndex: number, src: string) {
-  const app = createApp({
-    render: () => h(SlideItem, {
-      sliderIndex,
-      src,
-      bgc: getRandomColor()
-    })
-  })
-  const parent = document.createElement('div')
-  const insertELement = app.mount(parent)
-  sliderMap.set(sliderIndex, app)
-  console.log(sliderMap);
-
-  return insertELement.$el
-} */
 </script>
 
 <template>
@@ -186,6 +186,7 @@ function changeDistance() {
       @mousedown="handleMouseDown"
       @mouseup="handleMouseUp"
       @mousemove="handleMouseMove"
+      @keydown="handleKeyDown"
     >
       <div
         class="slide-list"
@@ -198,16 +199,9 @@ function changeDistance() {
         <SlideItem
           v-for="(item, index) in dataList"
           :key="item.id"
-          :slider-index="index"
           :src="item.url"
-          :position="{
-            left: 0,
-            top: slideState.wrapper.height * index,
-          }"
-          :size="{
-            width: slideState.wrapper.width,
-            height: slideState.wrapper.height,
-          }"
+          :index="index"
+          :slide-state="slideState"
         />
       </div>
     </div>
