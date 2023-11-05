@@ -181,7 +181,7 @@ function changeDistance(index: number) {
 </script>
 
 <template>
-  <div style="padding: 0 10px 0; background-color: pink">
+  <!-- <div style="padding: 0 10px 0; background-color: pink"> -->
     <div
       class="slide-wrapper"
       ref="wrapperRef"
@@ -207,18 +207,19 @@ function changeDistance(index: number) {
         />
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <style scoped lang="scss">
 .slide-wrapper {
-  width: 400px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  background-color: pink;
+  // background-color: pink;
 
   // border: 2px solid red;
-  // overflow: hidden;
+  overflow: hidden;
+  border-radius: 10px;
   .slide-list {
     // width: 100%;
     box-sizing: border-box;

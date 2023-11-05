@@ -1,27 +1,43 @@
 <template>
   <div class="app">
-    <VerticalSlider></VerticalSlider>
+    <BaseLayout>
+      <template #topBar>
+        <TopBar></TopBar>
+      </template>
+      <template #leftBar>
+        <LeftSideBar></LeftSideBar>
+      </template>
+
+      <template #mainContainer>
+        <MainContainer>
+          <router-view v-slot="{ Component }">
+            <transition :name="''">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </MainContainer>
+      </template>
+    </BaseLayout>
+
+    <!-- <VerticalSlider></VerticalSlider> -->
     <!-- <useOffsetPagination></useOffsetPagination> -->
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseLayout from "@/components/layout/BaseLayout.vue";
+import MainContainer from "@/components/layout/MainContainer.vue";
 // import { getRecommendVideo } from "./request"
 // import { getLocalVideos } from "@/mock/resource";
 import VerticalSlider from "@/components/slider/VerticalSlider.vue";
 import useOffsetPagination from "./demo/useOffsetPagination.vue";
-
-// function getVideo() {
-//   // getRecommendVideo({ pageCount: 0, pageSize: 10 })
-//   getLocalVideos()
-// }
+import LeftSideBar from "@/components/sideBar/LeftSideBar.vue";
+import TopBar from "@/components/topBar/TopBar.vue";
 </script>
 
 <style scoped lang="scss">
 .app {
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
 }
 </style>

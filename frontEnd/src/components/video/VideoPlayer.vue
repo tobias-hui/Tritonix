@@ -50,7 +50,7 @@ function handleClick(e: MouseEvent) {
 
 <template>
   <div class="videoContainer">
-    <video ref="videoRef" class="video-js" />
+    <video ref="videoRef" class="video-js" style="mix-blend-mode: screen;display:block;" />
     <svg
       v-show="!playerState.isPlaying"
       :style="{
