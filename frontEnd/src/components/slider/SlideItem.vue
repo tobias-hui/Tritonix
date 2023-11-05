@@ -26,7 +26,7 @@ const colorRef = ref(getRandomColor());
   <div
     class="swiper-slide"
     :style="{
-      backgroundColor: colorRef,
+      // backgroundColor: colorRef,
       width: `${slideState.wrapper.width}px`,
       height: `${slideState.wrapper.height}px`,
       top: `${index * slideState.wrapper.height}px`,
@@ -46,6 +46,7 @@ const colorRef = ref(getRandomColor());
           },
         ],
         loop: true,
+        backgroundColor:'#fff',
       }"
       :slide-state="slideState"
     ></video-player>
