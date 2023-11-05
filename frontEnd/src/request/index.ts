@@ -1,1 +1,1 @@
-export * from "./video";
+export * from "./mock/video";
