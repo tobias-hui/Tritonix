@@ -78,8 +78,8 @@ onMounted(async () => {
   Object.assign(dataList, res.videos);
 });
 
-function handleMouseDown(e: MouseEvent) {
-  console.log("mouseDown", e.timeStamp);
+function handleVerticalMouseDown(e: MouseEvent) {
+  console.log("vertical-slider-mouseDown", e.timeStamp);
   slideState.mouseDownTimeStamp = e.timeStamp;
   slideState.isMouseDown = true;
   slideState.durationTime = 0;
@@ -89,8 +89,8 @@ function handleMouseDown(e: MouseEvent) {
 
   // console.log("mouseDown", e, pageX, pageY);
 }
-function handleMouseUp(e: MouseEvent) {
-  console.log("mouseUp", e.timeStamp);
+function handleVerticalMouseUp(e: MouseEvent) {
+  console.log("vertical-slider-mouseUp", e.timeStamp);
 
   e.preventDefault();
   slideState.isMouseDown = false;
@@ -122,8 +122,10 @@ function handleMouseUp(e: MouseEvent) {
   // console.log(slideState.lastTransition);
 }
 
-function handleMouseMove(e: MouseEvent) {
+function handleVerticalMouseMove(e: MouseEvent) {
+  // console.log('vertical-slider-mouseMove');
   if (!slideState.isMouseDown) return;
+
   e.preventDefault();
   // console.log('mouseMove', e);
   // 当前位置
@@ -183,9 +185,9 @@ function changeDistance(index: number) {
     <div
       class="slide-wrapper"
       ref="wrapperRef"
-      @mousedown="handleMouseDown"
-      @mouseup="handleMouseUp"
-      @mousemove="handleMouseMove"
+      @mousedown="handleVerticalMouseDown"
+      @mouseup="handleVerticalMouseUp"
+      @mousemove="handleVerticalMouseMove"
       @keydown="handleKeyDown"
     >
       <div

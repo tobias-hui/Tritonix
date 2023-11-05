@@ -45,6 +45,7 @@ const colorRef = ref(getRandomColor());
             type: 'video/mp4',
           },
         ],
+        loop: true,
       }"
       :slide-state="slideState"
     ></video-player>
