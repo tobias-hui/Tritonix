@@ -6,7 +6,7 @@ from fastapi import UploadFile, File
 
     
 class Video(BaseModel):
-    id: str
+    id: Optional[str] = Field(None)
     create_time: str
     favoriting_count: int
     follower_count: int

@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from qiniu import Auth
-from bson import ObjectId
+from bson import ObjectId, errors
 from datetime import datetime
 from typing import List
 
@@ -81,3 +81,18 @@ def search_videos(keyword: str) -> List[dict]:
         video['frame_url'] = video_service.get_frame_url(video_key, False)
         video['cover_url'] = video_service.get_frame_url(video_key, True)
     return videos
+
+def get_mixed_videos(skip: int, limit: int):
+    # 使用聚合管道随机获取视频
+    pipeline = [
+        {"$sample": {"size": limit}},  # 随机获取指定数量的视频
+        {"$skip": skip}  # 跳过前面的视频，实现分页
+    ]
+    videos = list(collection.aggregate(pipeline))
+    for video in videos:
+        video_key = video['qiniuKey']
+        video['frame_url'] = video_service.get_frame_url(video_key, False)
+        video['cover_url'] = video_service.get_frame_url(video_key, True)
+    return videos
+
+
