@@ -15,7 +15,6 @@ import useOffsetPagination from "./demo/useOffsetPagination.vue";
 //   // getRecommendVideo({ pageCount: 0, pageSize: 10 })
 //   getLocalVideos()
 // }
-
 </script>
 
 <style scoped lang="scss">
