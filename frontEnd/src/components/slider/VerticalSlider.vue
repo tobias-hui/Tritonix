@@ -22,19 +22,13 @@ import { useEventListener, useEventBus } from "@vueuse/core";
 import { getRecommendVideo } from "@/request";
 import { getCategories, getVideos } from "@/request/server/video";
 // type
-import { RecommendVideo, VideoInfo } from "@/types/video";
+// import { RecommendVideo, VideoInfo } from "@/types/video";
 import { SlideState } from "./type/slide";
+import { VideoInformation } from "@/types/video";
 
-const eventBus = useEventBus("swiper");
-// eventBus.on(()=>{
-//   console.log('reach')
-//   const e=createEl(5,qq1)
-//   const firstChild=swiperWrapperRef.value!.firstChild
-//   console.log('firstChild',firstChild);
-
-//   swiperWrapperRef.value?.removeChild(firstChild)
-//   swiperWrapperRef.value?.appendChild(e)
-// })
+const props = defineProps<{
+  dataList: VideoInformation[];
+}>();
 const slideState = reactive({
   currentIndex: 0,
   start: {
@@ -52,11 +46,10 @@ const slideState = reactive({
   durationTime: 0,
   mouseDownTimeStamp: 0,
 });
-const dataList = reactive<VideoInfo[]>([]);
-const sliderMap = new Map<number, App<Element>>();
+// const dataList = reactive<VideoInfo[]>([]);
+
 const slideListRef = ref<HTMLDivElement | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
-const arr = reactive([]);
 
 watch(
   () => slideState.currentIndex,
@@ -70,12 +63,9 @@ onMounted(async () => {
   slideState.wrapper.width = wrapperRef.value.offsetWidth;
   slideState.wrapper.height = wrapperRef.value.offsetHeight;
 
-  // const res = await getRecommendVideo({ currentPage: 1, currentPageSize: 5 })
-  // Object.assign(arr, res.videos)
-  const res = await getRecommendVideo({ currentPage: 1, currentPageSize: 5 });
-  // console.log(res);
-  const newData = res.videos.map((item) => {});
-  Object.assign(dataList, res.videos);
+  // const res = await getRecommendVideo({ currentPage: 1, currentPageSize: 5 });
+  // // console.log(res);
+  // Object.assign(dataList, res.videos);
 });
 
 function handleVerticalMouseDown(e: MouseEvent) {
@@ -107,7 +97,7 @@ function handleVerticalMouseUp(e: MouseEvent) {
       slideState.currentIndex -= changeIndex;
     } else {
       // 向上
-      if (slideState.currentIndex === dataList.length - 1) {
+      if (slideState.currentIndex === props.dataList.length - 1) {
         changeDistance(slideState.currentIndex);
       } else {
         const changeIndex = -Math.floor(dy / slideState.wrapper.height);
@@ -152,7 +142,7 @@ function handleKeyDown(e: KeyboardEvent) {
   console.log(e, slideState.currentIndex);
   const { code } = e;
   if (code === "ArrowDown") {
-    if (dataList.length - 1 > slideState.currentIndex) {
+    if (props.dataList.length - 1 > slideState.currentIndex) {
       slideState.currentIndex++;
     }
   } else if (code === "ArrowUp") {
@@ -182,31 +172,31 @@ function changeDistance(index: number) {
 
 <template>
   <!-- <div style="padding: 0 10px 0; background-color: pink"> -->
+  <div
+    class="slide-wrapper"
+    ref="wrapperRef"
+    @mousedown="handleVerticalMouseDown"
+    @mouseup="handleVerticalMouseUp"
+    @mousemove="handleVerticalMouseMove"
+    @keydown="handleKeyDown"
+  >
     <div
-      class="slide-wrapper"
-      ref="wrapperRef"
-      @mousedown="handleVerticalMouseDown"
-      @mouseup="handleVerticalMouseUp"
-      @mousemove="handleVerticalMouseMove"
-      @keydown="handleKeyDown"
+      class="slide-list"
+      ref="slideListRef"
+      :style="{
+        transform: `translate3d(0,${slideState.transition.y}px,0)`,
+        transitionDuration: `${slideState.durationTime}s`,
+      }"
     >
-      <div
-        class="slide-list"
-        ref="slideListRef"
-        :style="{
-          transform: `translate3d(0,${slideState.transition.y}px,0)`,
-          transitionDuration: `${slideState.durationTime}s`,
-        }"
-      >
-        <SlideItem
-          v-for="(item, index) in dataList"
-          :key="item.id"
-          :src="item.url"
-          :index="index"
-          :slide-state="slideState"
-        />
-      </div>
+      <SlideItem
+        v-for="(item, index) in dataList"
+        :key="item.id"
+        :src="item.frame_url"
+        :index="index"
+        :slide-state="slideState"
+      />
     </div>
+  </div>
   <!-- </div> -->
 </template>
 

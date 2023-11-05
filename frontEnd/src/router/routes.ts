@@ -4,5 +4,7 @@ import Home from "@/pages/home/Home.vue"
 export const routes: RouteRecordRaw[] = [
   { path: '/', component:Home },
 
-  { path: '/home', component: Home },
+  { path: '/Otaku', component: Home },
+  { path: '/sports', component: Home },
+  { path: '/pet', component: Home },
 ]
