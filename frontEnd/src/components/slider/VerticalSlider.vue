@@ -20,6 +20,7 @@ import { useEventListener, useEventBus } from "@vueuse/core";
 
 // request
 import { getRecommendVideo } from "@/request";
+import { getCategories, getVideos } from "@/request/server/video";
 // type
 import { RecommendVideo, VideoInfo } from "@/types/video";
 import { SlideState } from "./type/slide";
@@ -71,9 +72,8 @@ onMounted(async () => {
 
   // const res = await getRecommendVideo({ currentPage: 1, currentPageSize: 5 })
   // Object.assign(arr, res.videos)
-  // console.log(res);
   const res = await getRecommendVideo({ currentPage: 1, currentPageSize: 5 });
-  console.log("res", res);
+  // console.log(res);
   const newData = res.videos.map((item) => {});
   Object.assign(dataList, res.videos);
 });
