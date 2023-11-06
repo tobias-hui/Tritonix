@@ -1,30 +1,16 @@
 <script setup lang="ts">
-import qq1 from "../../assets/video/qq3.mp4";
-// import { getLocalVideos } from "@/mock/resource"
-// // vue
+// vue
 import { ref, onMounted, reactive, createApp, App, h, watch } from "vue";
 // component
-// import { Swiper, SwiperSlide } from 'swiper/vue'
+
 import SlideItem from "./SlideItem.vue";
-import Swiper from "swiper";
-import { SwiperOptions } from "swiper/types";
-import "swiper/scss";
-import "swiper/scss/pagination";
-import { Pagination } from "swiper/modules";
 
-import VideoPlayer from "@/components/video/VideoPlayer.vue";
-// hook
-
-import useSwiper from "./hooks/useSwiper";
-import { useEventListener, useEventBus } from "@vueuse/core";
-
-// request
-import { getRecommendVideo } from "@/request";
-import { getCategories, getVideos } from "@/request/server/video";
 // type
 // import { RecommendVideo, VideoInfo } from "@/types/video";
 import { SlideState } from "./type/slide";
 import { VideoInfo, VideoInformation } from "@/types/video";
+// hook
+import { useEventBus } from "@vueuse/core";
 
 const props = defineProps<{
   dataList: VideoInformation[];
@@ -49,12 +35,14 @@ const slideState = reactive({
   transition: { x: 0, y: 0 },
   durationTime: 0,
   mouseDownTimeStamp: 0,
+  isMoved: false,
 });
 // const dataList = reactive<VideoInfo[]>([]);
 
 const slideListRef = ref<HTMLDivElement | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 
+const changeVideoStatusBus = useEventBus("changeVideoStatusBus");
 watch(
   () => slideState.currentIndex,
   (newVal, oldVal) => {
@@ -66,6 +54,9 @@ watch(
     changeDistance(newVal);
   },
 );
+// watch(()=>props.dataList,(newList)=>{
+
+// })
 onMounted(async () => {
   if (!(wrapperRef.value && slideListRef.value)) return;
   slideState.wrapper.width = wrapperRef.value.offsetWidth;
@@ -80,6 +71,7 @@ function handleVerticalMouseDown(e: MouseEvent) {
   console.log("vertical-slider-mouseDown", e.timeStamp);
   slideState.mouseDownTimeStamp = e.timeStamp;
   slideState.isMouseDown = true;
+  slideState.isMoved = false;
   slideState.durationTime = 0;
   const { pageX, pageY } = e;
   slideState.start.x = pageX;
@@ -91,6 +83,10 @@ function handleVerticalMouseUp(e: MouseEvent) {
   console.log("vertical-slider-mouseUp", e.timeStamp);
 
   e.preventDefault();
+  // 一并处理点击的暂停或播放
+  if (!slideState.isMoved) {
+    changeVideoStatusBus.emit();
+  }
   slideState.isMouseDown = false;
   slideState.durationTime = 0.3;
   // console.log('mouseUp', e);
@@ -129,6 +125,7 @@ function handleVerticalMouseMove(e: MouseEvent) {
 
   e.preventDefault();
   // console.log('mouseMove', e);
+  slideState.isMoved = true;
   // 当前位置
   const { pageX, pageY } = e;
 
@@ -200,6 +197,7 @@ function changeDistance(index: number) {
         v-for="(item, index) in dataList"
         :key="item.id"
         :src="item.playback_url"
+        :bgSrc="item.cover_url"
         :index="index"
         :slide-state="slideState"
       />

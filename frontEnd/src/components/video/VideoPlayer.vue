@@ -8,6 +8,7 @@ import "video.js/dist/video-js.css";
 import ProgressBar from "./ProgressBar.vue";
 // hook
 import useVideo from "./hooks/useVideo";
+import { useEventBus } from "@vueuse/core";
 // type
 import { SlideState } from "../slider/type/slide";
 
@@ -18,11 +19,22 @@ const props = defineProps<{
 }>();
 const videoRef: Ref<null | HTMLVideoElement> = ref(null);
 
+const changeVideoStatusBus = useEventBus("changeVideoStatusBus");
 const { playerRef, playerState } = useVideo(videoRef, props.options);
+
 onMounted(() => {
   if (!playerRef.value) return;
-  
-  playerRef.value.on("click", handleClick);
+
+  changeVideoStatusBus.on((e) => {
+    if(!props.active) return;
+    const isPaused = playerRef.value?.paused();
+    if (isPaused) {
+      playerRef.value?.play();
+    } else {
+      playerRef.value?.pause();
+    }
+  });
+ 
 });
 
 watch(
@@ -36,21 +48,18 @@ watch(
     } else {
       playerState.isPlaying = false;
     }
-  }
+  },
 );
 
-function handleClick(e: MouseEvent) {
-  const { timeStamp } = e;
-  if (timeStamp - props.slideState.mouseDownTimeStamp > 100) return;
-  console.log("click", e.timeStamp);
-  // playerRef.value?.play()
-  playerState.isPlaying = !playerState.isPlaying;
-}
 </script>
 
 <template>
   <div class="videoContainer">
-    <video ref="videoRef" class="video-js" style="background-color: transparent;" />
+    <video
+      ref="videoRef"
+      class="video-js"
+      style="background-color: transparent"
+    />
     <svg
       v-show="!playerState.isPlaying"
       :style="{
@@ -75,7 +84,7 @@ function handleClick(e: MouseEvent) {
         p-id="1852"
       ></path>
     </svg>
-    <ProgressBar :player="playerRef"/>
+    <ProgressBar :player="playerRef" />
   </div>
 </template>
 
