@@ -21,7 +21,7 @@ import { getRecommendVideo } from "@/request/mock/video";
 const dataList = reactive<VideoInformation[]>([]);
 const pageState = reactive({
   category: "",
-  currentPage: 1,
+  currentPage: 0,
   size: 10,
 });
 const refreshKeyRef = ref(true);
