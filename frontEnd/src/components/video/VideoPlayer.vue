@@ -58,7 +58,7 @@ watch(
     <video
       ref="videoRef"
       class="video-js"
-      style="background-color: transparent;outline: none;"
+      style="background-color: transparent;outline: none; border: none;"
     />
     <svg
       v-show="!playerState.isPlaying"

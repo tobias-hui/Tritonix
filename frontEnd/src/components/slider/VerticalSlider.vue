@@ -157,12 +157,7 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 function canSlide(moveValue: number, judgeValue: number) {
-  if (
-    Math.abs(moveValue) > judgeValue
-    // dataList.length - 1 > slideState.currentIndex
-  ) {
-    return true;
-  } else return false;
+  return Math.abs(moveValue) > judgeValue 
 }
 function getDistance(index: number) {
   return -index * slideState.wrapper.height;
@@ -176,7 +171,6 @@ function changeDistance(index: number) {
 </script>
 
 <template>
-  <!-- <div style="padding: 0 10px 0; background-color: pink"> -->
   <div
     class="slide-wrapper"
     ref="wrapperRef"
@@ -203,7 +197,6 @@ function changeDistance(index: number) {
       />
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <style scoped lang="scss">
@@ -211,9 +204,6 @@ function changeDistance(index: number) {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  // background-color: pink;
-
-  // border: 2px solid red;
   overflow: hidden;
   border-radius: 10px;
   .slide-list {
