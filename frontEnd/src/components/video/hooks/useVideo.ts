@@ -10,19 +10,19 @@ export default function useVideo(videoRef: Ref<HTMLVideoElement | null>, options
   })
   onMounted(() => {
     if (!videoRef.value) return;
-    console.log(options);
+    // console.log(options);
 
     playerRef.value = videojs(videoRef.value, options, () => {
       // playerRef.value?.log("onPlayerReady", player);
     });
     playerRef.value.on('pause', () => {
       console.log('pause');
-      
+
       playerState.isPlaying = false
     })
     playerRef.value.on('play', () => {
       console.log('play')
-      
+
       playerState.isPlaying = true
     })
 

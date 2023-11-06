@@ -9,6 +9,7 @@ const props = defineProps<{
   index: number;
   // mouseDownTimeStamp:number
   slideState: SlideState;
+  bgSrc: string;
   // transitionY: number
 }>();
 console.log("slide-item", props, props.index);
@@ -31,8 +32,25 @@ const colorRef = ref(getRandomColor());
       height: `${slideState.wrapper.height}px`,
       top: `${index * slideState.wrapper.height}px`,
       left: `${0}px`,
+      boxSizing: 'border-box',
+      // paddingBottom: '10px',
+      cursor: 'pointer',
     }"
   >
+    <div
+      :style="{
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        boxSizing: 'border-box',
+        padding: '10px',
+        zIndex: '-1',
+        backgroundImage: `url('${props.bgSrc}')`,
+        backgroundRepeat:'no-repeat',
+        backgroundSize:'cover',
+        filter: 'blur(40px)',
+      }"
+    />
     <video-player
       :active="index === slideState.currentIndex"
       :options="{
@@ -46,7 +64,7 @@ const colorRef = ref(getRandomColor());
           },
         ],
         loop: true,
-        backgroundColor:'#fff',
+        // backgroundColor: '#fff',
       }"
       :slide-state="slideState"
     ></video-player>

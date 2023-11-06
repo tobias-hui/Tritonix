@@ -1,34 +1,24 @@
 <script setup lang="ts">
-import qq1 from "../../assets/video/qq3.mp4";
-// import { getLocalVideos } from "@/mock/resource"
-// // vue
+// vue
 import { ref, onMounted, reactive, createApp, App, h, watch } from "vue";
 // component
-// import { Swiper, SwiperSlide } from 'swiper/vue'
+
 import SlideItem from "./SlideItem.vue";
-import Swiper from "swiper";
-import { SwiperOptions } from "swiper/types";
-import "swiper/scss";
-import "swiper/scss/pagination";
-import { Pagination } from "swiper/modules";
 
-import VideoPlayer from "@/components/video/VideoPlayer.vue";
-// hook
-
-import useSwiper from "./hooks/useSwiper";
-import { useEventListener, useEventBus } from "@vueuse/core";
-
-// request
-import { getRecommendVideo } from "@/request";
-import { getCategories, getVideos } from "@/request/server/video";
 // type
 // import { RecommendVideo, VideoInfo } from "@/types/video";
 import { SlideState } from "./type/slide";
-import { VideoInformation } from "@/types/video";
+import { VideoInfo, VideoInformation } from "@/types/video";
+// hook
+import { useEventBus } from "@vueuse/core";
 
 const props = defineProps<{
   dataList: VideoInformation[];
 }>();
+const emit = defineEmits<{
+  (e: "loadMore"): void;
+}>();
+
 const slideState = reactive({
   currentIndex: 0,
   start: {
@@ -45,19 +35,28 @@ const slideState = reactive({
   transition: { x: 0, y: 0 },
   durationTime: 0,
   mouseDownTimeStamp: 0,
+  isMoved: false,
 });
 // const dataList = reactive<VideoInfo[]>([]);
 
 const slideListRef = ref<HTMLDivElement | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 
+const changeVideoStatusBus = useEventBus("changeVideoStatusBus");
 watch(
   () => slideState.currentIndex,
   (newVal, oldVal) => {
     // console.log('watch',newVal, oldVal);
+    console.log("currentIndex", newVal);
+    if (newVal + 5 > props.dataList.length) {
+      emit("loadMore");
+    }
     changeDistance(newVal);
-  }
+  },
 );
+// watch(()=>props.dataList,(newList)=>{
+
+// })
 onMounted(async () => {
   if (!(wrapperRef.value && slideListRef.value)) return;
   slideState.wrapper.width = wrapperRef.value.offsetWidth;
@@ -72,6 +71,7 @@ function handleVerticalMouseDown(e: MouseEvent) {
   console.log("vertical-slider-mouseDown", e.timeStamp);
   slideState.mouseDownTimeStamp = e.timeStamp;
   slideState.isMouseDown = true;
+  slideState.isMoved = false;
   slideState.durationTime = 0;
   const { pageX, pageY } = e;
   slideState.start.x = pageX;
@@ -80,9 +80,13 @@ function handleVerticalMouseDown(e: MouseEvent) {
   // console.log("mouseDown", e, pageX, pageY);
 }
 function handleVerticalMouseUp(e: MouseEvent) {
-  console.log("vertical-slider-mouseUp", e.timeStamp);
+  console.log("vertical-slider-mouseUp");
 
   e.preventDefault();
+  // 一并处理点击的暂停或播放
+  if (!slideState.isMoved) {
+    changeVideoStatusBus.emit();
+  }
   slideState.isMouseDown = false;
   slideState.durationTime = 0.3;
   // console.log('mouseUp', e);
@@ -91,7 +95,10 @@ function handleVerticalMouseUp(e: MouseEvent) {
   if (canSlide(dy, 50)) {
     if (dy > 0) {
       // 列表向下
-      if (slideState.currentIndex <= 0) return;
+      if (slideState.currentIndex <= 0) {
+        changeDistance(0);
+        return;
+      }
       const changeIndex = Math.ceil(dy / slideState.wrapper.height);
       // console.log('changeIndex', changeIndex);
       slideState.currentIndex -= changeIndex;
@@ -118,11 +125,9 @@ function handleVerticalMouseMove(e: MouseEvent) {
 
   e.preventDefault();
   // console.log('mouseMove', e);
+  slideState.isMoved = true;
   // 当前位置
   const { pageX, pageY } = e;
-
-  // const lastX = slideState.move.x
-  // const lastY = slideState.move.y
 
   slideState.move.x = pageX - slideState.start.x;
   slideState.move.y = pageY - slideState.start.y;
@@ -152,12 +157,7 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 function canSlide(moveValue: number, judgeValue: number) {
-  if (
-    Math.abs(moveValue) > judgeValue
-    // dataList.length - 1 > slideState.currentIndex
-  ) {
-    return true;
-  } else return false;
+  return Math.abs(moveValue) > judgeValue 
 }
 function getDistance(index: number) {
   return -index * slideState.wrapper.height;
@@ -171,7 +171,6 @@ function changeDistance(index: number) {
 </script>
 
 <template>
-  <!-- <div style="padding: 0 10px 0; background-color: pink"> -->
   <div
     class="slide-wrapper"
     ref="wrapperRef"
@@ -191,13 +190,13 @@ function changeDistance(index: number) {
       <SlideItem
         v-for="(item, index) in dataList"
         :key="item.id"
-        :src="item.frame_url"
+        :src="item.playback_url"
+        :bgSrc="item.cover_url"
         :index="index"
         :slide-state="slideState"
       />
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <style scoped lang="scss">
@@ -205,9 +204,6 @@ function changeDistance(index: number) {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  // background-color: pink;
-
-  // border: 2px solid red;
   overflow: hidden;
   border-radius: 10px;
   .slide-list {
