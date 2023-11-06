@@ -31,6 +31,9 @@ const colorRef = ref(getRandomColor());
       height: `${slideState.wrapper.height}px`,
       top: `${index * slideState.wrapper.height}px`,
       left: `${0}px`,
+      boxSizing:'border-box',
+      padding:'10px',
+      cursor:'pointer'
     }"
   >
     <video-player

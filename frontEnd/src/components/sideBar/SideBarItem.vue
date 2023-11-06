@@ -28,8 +28,9 @@ function handleClick() {
   cursor: pointer;
   border-radius: 12px;
   margin-top: 10px;
+  transition: all 0.3s;
 }
 .container:hover {
-  background-color: #f7f7f7;
+  background-color: #E5E5E5;
 }
 </style>

@@ -20,15 +20,15 @@ watch(
   () => props.player,
   (newVal) => {
     if (!newVal) return;
-    console.log("watch");
+    // console.log("watch");
 
     newVal.on("loadedmetadata", () => {
-      console.log("duration", newVal.duration(), newVal.currentTime());
+      // console.log("duration", newVal.duration(), newVal.currentTime());
       progressState.total = newVal.duration()!;
       progressState.currentTime = newVal.currentTime()!;
       stepRef.value =
         progressBarRef.value!.offsetWidth / Math.floor(progressState.total);
-      console.log(stepRef.value, "step");
+      // console.log(stepRef.value, "step");
 
       newVal.on("timeupdate", (e: Event) => {
         progressState.currentTime = Math.ceil(newVal.currentTime()!);
@@ -37,14 +37,14 @@ watch(
       });
     });
     // console.log(newVal.duration(10), "-----");
-  }
+  },
 );
 function handleMouseDown(e: MouseEvent) {
   e.stopPropagation();
   props.player?.pause();
   const { offsetX } = e;
   progressState.isMouseDown = true;
-  console.log("down");
+  // console.log("down");
 
   window.addEventListener("mousemove", handleMouseMove, { capture: true });
   window.addEventListener("mouseup", handleMouseUp, { capture: true });
@@ -62,7 +62,7 @@ function handleMouseUp(e: MouseEvent) {
   progressState.isMouseDown = false;
   // 一并处理没有mousemove的点击事件
   changeX(e);
-  console.log("end time", progressState.x, progressState.x / stepRef.value);
+  // console.log("end time", progressState.x, progressState.x / stepRef.value);
   progressState.currentTime = progressState.x / stepRef.value;
   props.player?.currentTime(progressState.currentTime);
   props.player?.play();
@@ -74,7 +74,7 @@ function changeX(e: MouseEvent) {
   if (!progressBarRef.value) return;
   const { offsetX, clientX } = e;
   const { left, width, right } = progressBarRef.value.getBoundingClientRect();
-  console.log(left, clientX);
+  // console.log(left, clientX);
   const pointerX = clientX > left + width ? left + width : clientX;
   progressState.x = pointerX - left > 0 ? pointerX - left : 0;
 }
@@ -125,4 +125,7 @@ function changeX(e: MouseEvent) {
     background-color: #fff;
   }
 }
+// .progress-bar:hover {
+//   height: 13px;
+// }
 </style>

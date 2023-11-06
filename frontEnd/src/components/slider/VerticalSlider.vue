@@ -24,11 +24,15 @@ import { getCategories, getVideos } from "@/request/server/video";
 // type
 // import { RecommendVideo, VideoInfo } from "@/types/video";
 import { SlideState } from "./type/slide";
-import { VideoInformation } from "@/types/video";
+import { VideoInfo, VideoInformation } from "@/types/video";
 
 const props = defineProps<{
   dataList: VideoInformation[];
 }>();
+const emit = defineEmits<{
+  (e: "loadMore"): void;
+}>();
+
 const slideState = reactive({
   currentIndex: 0,
   start: {
@@ -55,8 +59,12 @@ watch(
   () => slideState.currentIndex,
   (newVal, oldVal) => {
     // console.log('watch',newVal, oldVal);
+    console.log("currentIndex", newVal);
+    if (newVal + 5 > props.dataList.length) {
+      emit("loadMore");
+    }
     changeDistance(newVal);
-  }
+  },
 );
 onMounted(async () => {
   if (!(wrapperRef.value && slideListRef.value)) return;
@@ -91,7 +99,10 @@ function handleVerticalMouseUp(e: MouseEvent) {
   if (canSlide(dy, 50)) {
     if (dy > 0) {
       // 列表向下
-      if (slideState.currentIndex <= 0) return;
+      if (slideState.currentIndex <= 0) {
+        changeDistance(0);
+        return;
+      }
       const changeIndex = Math.ceil(dy / slideState.wrapper.height);
       // console.log('changeIndex', changeIndex);
       slideState.currentIndex -= changeIndex;
@@ -120,9 +131,6 @@ function handleVerticalMouseMove(e: MouseEvent) {
   // console.log('mouseMove', e);
   // 当前位置
   const { pageX, pageY } = e;
-
-  // const lastX = slideState.move.x
-  // const lastY = slideState.move.y
 
   slideState.move.x = pageX - slideState.start.x;
   slideState.move.y = pageY - slideState.start.y;
@@ -191,7 +199,7 @@ function changeDistance(index: number) {
       <SlideItem
         v-for="(item, index) in dataList"
         :key="item.id"
-        :src="item.frame_url"
+        :src="item.playback_url"
         :index="index"
         :slide-state="slideState"
       />
