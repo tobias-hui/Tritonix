@@ -21,6 +21,7 @@ class Video(BaseModel):
     game: Optional[str] = Field(None)
     frame_url: Optional[str] = Field(None)
     cover_url: Optional[str] = Field(None)
+    playback_url: Optional[str] = Field(None)
 # class VideoIn(BaseModel):
 #     name: str
 #     description: str

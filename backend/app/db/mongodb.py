@@ -31,8 +31,13 @@ def get_videos_by_category(category_id: str, skip: int, limit: int):
 
     for video in videos:
         video_key = video['qiniuKey']
+        base_url = f'http://{video_service.qiniu_domain}/{video_key}'
+        private_url = video_service.qiniu_auth.private_download_url(base_url, expires=3600)
         video['frame_url'] = video_service.get_frame_url(video_key, False)
         video['cover_url'] = video_service.get_frame_url(video_key, True)
+        print(private_url)
+        video['playback_url'] = private_url
+
     return videos
 
 def get_video_detail(video_id: str):
@@ -42,8 +47,11 @@ def get_video_detail(video_id: str):
         video = pet_collection.find_one({"_id": ObjectId(video_id)})
     if video:
         video_key = video['qiniuKey']
+        base_url = f'http://{video_service.qiniu_domain}/{video_key}'
+        private_url = video_service.qiniu_auth.private_download_url(base_url, expires=3600)
         video['frame_url'] = video_service.get_frame_url(video_key, False)
         video['cover_url'] = video_service.get_frame_url(video_key, True)
+        video['playback_url'] = private_url
         return video
     return None
 
@@ -78,8 +86,11 @@ def search_videos(keyword: str) -> List[dict]:
 
     for video in videos:
         video_key = video['qiniuKey']
+        base_url = f'http://{video_service.qiniu_domain}/{video_key}'
+        private_url = video_service.qiniu_auth.private_download_url(base_url, expires=3600)
         video['frame_url'] = video_service.get_frame_url(video_key, False)
         video['cover_url'] = video_service.get_frame_url(video_key, True)
+        video['playback_url'] = private_url
     return videos
 
 def get_mixed_videos(skip: int, limit: int):
@@ -91,8 +102,11 @@ def get_mixed_videos(skip: int, limit: int):
     videos = list(collection.aggregate(pipeline))
     for video in videos:
         video_key = video['qiniuKey']
+        base_url = f'http://{video_service.qiniu_domain}/{video_key}'
+        private_url = video_service.qiniu_auth.private_download_url(base_url, expires=3600)
         video['frame_url'] = video_service.get_frame_url(video_key, False)
         video['cover_url'] = video_service.get_frame_url(video_key, True)
+        video['playback_url'] = private_url
     return videos
 
 

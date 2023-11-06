@@ -7,7 +7,7 @@ class Config:
     # 七牛云配置
     ACCESS_KEY = os.getenv("ACCESSKEY")
     SECRET_KEY = os.getenv("SECRETKEY")
-    BUCKET_NAME = os.getenv("BUCKET_NAME")
+    BUCKET_NAME = 'tritonix0'
     QINIU_DOMAIN = 's39r2f5eu.bkt.clouddn.com'
 
     # MongoDb配置
