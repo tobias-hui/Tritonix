@@ -75,10 +75,8 @@ async function loadVideo() {
 function handleLoadMore() {
   console.log("loadMore");
   pageState.currentPage++;
-  isLoading.value = true;
-  loadVideo().finally(() => {
-    isLoading.value = false;
-  });
+  // isLoading.value = true;
+  loadVideo()
 }
 </script>
 

@@ -11,7 +11,6 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // host:'12',
       '/proxy': {
         target: 'http://118.31.56.248:7860',
         changeOrigin: true,
