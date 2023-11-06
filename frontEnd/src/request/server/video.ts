@@ -41,6 +41,29 @@ export async function getVideos({
 
 }
 
+export async function getRecommendVideos({
+  page, size
+}: {
+  page: number
+  size: number
+}) {
+  try {
+    const res = await instance.get(`/api/v1/videos/recommend`, {
+      params: {
+        page,
+        size
+      }
+    })
+    const { data }: { data: VideoInformation[] } = res
+    console.log('getRecommendVideos', data);
+    return data
+  } catch (e) {
+    console.error(e)
+  }
+
+}
+
+
 export async function searchVideo(keyword: string) {
   try {
     const res = await instance.get(`/api/v1/videos/search`, {

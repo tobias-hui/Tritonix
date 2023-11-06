@@ -20,11 +20,11 @@ export type VideoInformation = {
   qiniuKey: string;
   uploadedAt: Date;
   categories: string;
-  game: string;
+  game: null;
   frame_url: string;
   cover_url: string;
+  playback_url: string;
 }
-
 export type Categories = {
   name: string
 }
