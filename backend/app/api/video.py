@@ -31,10 +31,10 @@ async def api_search_videos(keyword: str = Query(..., description="Search videos
     return videos
 
 @router.get("/videos/recommend", response_model=List[Video], tags=["视频信息"], name="推荐视频", description="获取进入app后的推荐视频")
-async def recommended_videos(page: int = Query(1, description="Page number"), size: int = Query(10, description="Size of each page")):
-    skip = (page - 1) * size
-    limit = size
+async def recommended_videos(skip: int = Query(0, description="Number of records to skip"), limit: int = Query(10, description="Size of each page")):
     videos = get_mixed_videos(skip, limit)
+    if videos is None:
+        raise HTTPException(status_code=404, detail="Video not found")
     return videos
 
 @router.get("/videos/{video_id}", response_model=Video, tags=["视频信息"], name="获取视频详情", description="获取某个视频的详细信息")
@@ -55,7 +55,7 @@ async def insert_video(name: str, description: str, categories: str, file: Uploa
         raise HTTPException(status_code=404, detail="Video not found")
     return video
 
-@router.get("/videos/{video_id}/playback-url", tags=["视频播放"], name="获取视频播放地址", description="获取某个视频的播放地址")
+@router.get("/videos/{video_id}/playback-url", tags=["视频播放"], name="获取视频播放地址", description="获取某个视频的播放地址", deprecated=True)
 async def get_video_playback_url(video_id: str):
     try:
         playback_url = video_service.get_video_playback_url(video_id)
@@ -63,3 +63,10 @@ async def get_video_playback_url(video_id: str):
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+@router.get("/videos/{video_id}/share-link", tags=["视频分享"], name="生成视频分享链接", description="为视频生成可分享的链接")
+async def generate_share_link(video_id: str):
+    try:
+        playback_url = video_service.get_video_playback_url(video_id)
+        return {"share_link": playback_url}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

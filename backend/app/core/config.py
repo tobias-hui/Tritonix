@@ -14,3 +14,9 @@ class Config:
     MONGODB_URL = os.getenv("MONGODB_URL")
     MONGO_DB = 'videos'
     MONGO_COLLECTION = 'douyin_videos'
+    MONGO_USER_DB = 'users'
+    MONGO_USER_COLLECTION = 'users'
+
+    SECRET = "YN-i4ibaKRosVuTYwiR5Nw"  #
+    ALGORITHM = "HS256"  # HMAC-SHA 256
+    ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 令牌过期时间

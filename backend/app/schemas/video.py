@@ -22,11 +22,6 @@ class Video(BaseModel):
     frame_url: Optional[str] = Field(None)
     cover_url: Optional[str] = Field(None)
     playback_url: Optional[str] = Field(None)
-# class VideoIn(BaseModel):
-#     name: str
-#     description: str
-#     file: UploadFile = File(...)
-#     categories: str
 
 class Category(BaseModel):
     name: str

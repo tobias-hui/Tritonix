@@ -3,14 +3,18 @@ from qiniu import Auth
 from bson import ObjectId, errors
 from datetime import datetime
 from typing import List
+from werkzeug.security import generate_password_hash
 
 from app.core.config import Config
 from app.services.video_service import VideoService
+from app.schemas.user import UserCreate, UserInDB
 
 # Replace with your actual connection string
 client = MongoClient(Config.MONGODB_URL)
 db = client[Config.MONGO_DB]
 collection = db[Config.MONGO_COLLECTION]
+users_db = client[Config.MONGO_USER_DB]
+users_collection = users_db[Config.MONGO_USER_COLLECTION]
 
 # 初始化VideoService
 video_service = VideoService(Auth(Config.ACCESS_KEY, Config.SECRET_KEY ), Config.BUCKET_NAME, Config.QINIU_DOMAIN)
@@ -110,3 +114,69 @@ def get_mixed_videos(skip: int, limit: int):
     return videos
 
 
+def create_user(user_in: UserCreate) -> UserInDB:
+    hashed_password = generate_password_hash(user_in.password)
+    user_data = user_in.model_dump()
+    user_data['hashed_password'] = hashed_password
+    user_data['created_at'] = datetime.utcnow()
+    result = users_collection.insert_one(user_data)
+    # 更新文档，添加id字段
+    user_data["id"] = str(result.inserted_id)
+    users_collection.update_one(
+        {'_id': result.inserted_id},
+        {'$set': {'id': str(result.inserted_id)}}
+    )
+    return UserInDB(**user_data)
+
+def get_user_by_email(email: str) -> UserInDB:
+    user_data = users_collection.find_one({"email": email})
+    return UserInDB(**user_data) if user_data else None
+
+def add_video_to_likes(user_id: str, video_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$addToSet": {"like": video_id}}  # $addToSet 防止重复添加
+    )
+    print(users_collection.find_one({"_id": user_id}))
+
+def remove_video_from_likes(user_id: str, video_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$pull": {"like": video_id}}  # $pull 用来移除数组中的元素
+    )
+
+def add_user_to_follow(user_id: str, follow_user_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$addToSet": {"follow": follow_user_id}}
+    )
+
+def remove_user_from_following(user_id: str, video_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$pull": {"follow": video_id}}  # $pull 用来移除数组中的元素
+    )
+
+def add_video_to_collect(user_id: str, video_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$addToSet": {"collection": video_id}}  # $addToSet 防止重复添加
+    )
+
+def remove_video_from_collected(user_id: str, video_id: str):
+    users_collection.update_one(
+        {"id": user_id},
+        {"$pull": {"collection": video_id}}  # $pull 用来移除数组中的元素
+    )
+
+def get_user_likes(user_id: str) -> List[str]:
+    user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+    return user_data["like"] if user_data and "like" in user_data else []
+
+def get_user_following(user_id: str) -> List[str]:
+    user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+    return user_data["follow"] if user_data and "like" in user_data else []
+
+def get_user_collection(user_id: str) -> List[str]:
+    user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+    return user_data["collection"] if user_data and "like" in user_data else []
