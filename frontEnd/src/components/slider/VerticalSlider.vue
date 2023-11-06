@@ -80,7 +80,7 @@ function handleVerticalMouseDown(e: MouseEvent) {
   // console.log("mouseDown", e, pageX, pageY);
 }
 function handleVerticalMouseUp(e: MouseEvent) {
-  console.log("vertical-slider-mouseUp", e.timeStamp);
+  console.log("vertical-slider-mouseUp");
 
   e.preventDefault();
   // 一并处理点击的暂停或播放
