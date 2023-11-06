@@ -6,7 +6,7 @@ from fastapi import UploadFile, File
 
     
 class Video(BaseModel):
-    id: str
+    id: Optional[str] = Field(None)
     create_time: str
     favoriting_count: int
     follower_count: int
@@ -21,11 +21,7 @@ class Video(BaseModel):
     game: Optional[str] = Field(None)
     frame_url: Optional[str] = Field(None)
     cover_url: Optional[str] = Field(None)
-# class VideoIn(BaseModel):
-#     name: str
-#     description: str
-#     file: UploadFile = File(...)
-#     categories: str
+    playback_url: Optional[str] = Field(None)
 
 class Category(BaseModel):
     name: str
