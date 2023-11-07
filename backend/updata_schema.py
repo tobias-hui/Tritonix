@@ -24,5 +24,9 @@ def batch_update_add_id_field():
     else:
         print("No documents to update.")
 
+#def batch_update_add_author_field():
+
+
 # 执行批量更新
 batch_update_add_id_field()
+

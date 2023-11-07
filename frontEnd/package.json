@@ -15,7 +15,7 @@
     "pinia": "^2.1.7",
     "swiper": "^11.0.3",
     "video.js": "^8.6.1",
-    "vue": "^3.3.4",
+    "vue": "^3.2.36",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
