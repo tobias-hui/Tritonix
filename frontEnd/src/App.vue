@@ -18,7 +18,8 @@
         </MainContainer>
       </template>
     </BaseLayout>
-
+    
+    <LoginContainer></LoginContainer>
     <!-- <VerticalSlider></VerticalSlider> -->
     <!-- <useOffsetPagination></useOffsetPagination> -->
   </div>
@@ -29,6 +30,7 @@ import BaseLayout from "@/components/layout/BaseLayout.vue";
 import MainContainer from "@/components/layout/MainContainer.vue";
 // import { getRecommendVideo } from "./request"
 // import { getLocalVideos } from "@/mock/resource";
+import LoginContainer from "./components/LoginContainer.vue";
 import VerticalSlider from "@/components/slider/VerticalSlider.vue";
 import useOffsetPagination from "./demo/useOffsetPagination.vue";
 import LeftSideBar from "@/components/sideBar/LeftSideBar.vue";

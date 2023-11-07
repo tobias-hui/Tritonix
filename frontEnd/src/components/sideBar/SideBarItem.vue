@@ -44,7 +44,7 @@ function handleMouseLeave() {
 <style scoped lang="scss">
 .container {
   height: 50px;
-  width: 50px;
+  width: 128px;
   color: rgba(52, 51, 51, 0.8);
   font-weight: bold;
   display: inline-flex;
