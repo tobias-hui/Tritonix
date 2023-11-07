@@ -37,7 +37,6 @@ const slideState = reactive({
   mouseDownTimeStamp: 0,
   isMoved: false,
 });
-// const dataList = reactive<VideoInfo[]>([]);
 
 const slideListRef = ref<HTMLDivElement | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
@@ -54,9 +53,6 @@ watch(
     changeDistance(newVal);
   },
 );
-// watch(()=>props.dataList,(newList)=>{
-
-// })
 onMounted(async () => {
   if (!(wrapperRef.value && slideListRef.value)) return;
   slideState.wrapper.width = wrapperRef.value.offsetWidth;
@@ -68,7 +64,6 @@ onMounted(async () => {
 });
 
 function handleVerticalMouseDown(e: MouseEvent) {
-  console.log("vertical-slider-mouseDown", e.timeStamp);
   slideState.mouseDownTimeStamp = e.timeStamp;
   slideState.isMouseDown = true;
   slideState.isMoved = false;
@@ -77,7 +72,6 @@ function handleVerticalMouseDown(e: MouseEvent) {
   slideState.start.x = pageX;
   slideState.start.y = pageY;
 
-  // console.log("mouseDown", e, pageX, pageY);
 }
 function handleVerticalMouseUp(e: MouseEvent) {
   console.log("vertical-slider-mouseUp");
@@ -89,9 +83,7 @@ function handleVerticalMouseUp(e: MouseEvent) {
   }
   slideState.isMouseDown = false;
   slideState.durationTime = 0.3;
-  // console.log('mouseUp', e);
   const dy = slideState.transition.y - slideState.lastTransition.y;
-  // console.log("change", dy);
   if (canSlide(dy, 50)) {
     if (dy > 0) {
       // 列表向下
@@ -100,7 +92,6 @@ function handleVerticalMouseUp(e: MouseEvent) {
         return;
       }
       const changeIndex = Math.ceil(dy / slideState.wrapper.height);
-      // console.log('changeIndex', changeIndex);
       slideState.currentIndex -= changeIndex;
     } else {
       // 向上
@@ -108,23 +99,18 @@ function handleVerticalMouseUp(e: MouseEvent) {
         changeDistance(slideState.currentIndex);
       } else {
         const changeIndex = -Math.floor(dy / slideState.wrapper.height);
-        // console.log('changeIndex', changeIndex);
+        
         slideState.currentIndex += changeIndex;
       }
     }
   } else {
     changeDistance(slideState.currentIndex);
   }
-
-  // console.log(slideState.lastTransition);
 }
 
 function handleVerticalMouseMove(e: MouseEvent) {
-  // console.log('vertical-slider-mouseMove');
   if (!slideState.isMouseDown) return;
-
   e.preventDefault();
-  // console.log('mouseMove', e);
   slideState.isMoved = true;
   // 当前位置
   const { pageX, pageY } = e;
@@ -137,9 +123,7 @@ function handleVerticalMouseMove(e: MouseEvent) {
 
   const dx = slideState.move.x;
   const dy = slideState.move.y;
-  // console.log('dx,dy', dx, dy);
   slideState.transition.y += dy;
-  // console.log('transition-y', slideState.transition.y);
 }
 function handleKeyDown(e: KeyboardEvent) {
   // if(!slideListRef.value )return;

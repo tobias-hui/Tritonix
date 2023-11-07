@@ -13,14 +13,12 @@
     "axios": "^1.6.0",
     "mockjs": "^1.1.0",
     "pinia": "^2.1.7",
-    "swiper": "^11.0.3",
     "video.js": "^8.6.1",
     "vue": "^3.2.36",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@types/mockjs": "^1.0.9",
-    "@types/swiper": "^6.0.0",
     "@types/uuid": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@vitejs/plugin-vue": "^4.2.3",
