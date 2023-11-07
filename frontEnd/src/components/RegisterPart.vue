@@ -7,6 +7,7 @@ import MainButton from "@/components/button/MainButton.vue";
 // import { register } from '@/request/server/user';
 import { ModalStatus } from "@/types/components";
 import { RegisterProps, register } from "@/request/server/user";
+import { useThrottleFn, useStorage } from "@vueuse/core";
 
 const emit = defineEmits<{
   (e: "changeStatus", status: ModalStatus): void;
@@ -19,12 +20,16 @@ const userInfo = reactive<RegisterProps>({
   password: "",
 });
 
-async function handleRegister() {
-  // if (!testParams()) return;
-  // const res = await register(userInfo);
-}
-function changeStatus(){
-  emit('changeStatus','login')
+const handleRegister = useThrottleFn(async () => {
+  if (!testParams()) return;
+
+    const res = await register(userInfo);
+    // console.log("register", res);
+    alert("注册成功！");
+});
+
+function changeStatus() {
+  emit("changeStatus", "login");
 }
 
 function testParams() {
@@ -84,7 +89,9 @@ function testParams() {
         "
       >
         <MainButton :mode="'fill'" @click="handleRegister">注册</MainButton>
-        <MainButton :mode="'blank'" @click="changeStatus">已有账户,去登录</MainButton>
+        <MainButton :mode="'blank'" @click="changeStatus"
+          >已有账户,去登录</MainButton
+        >
       </div>
     </div>
   </div>

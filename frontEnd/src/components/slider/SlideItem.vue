@@ -12,7 +12,7 @@ const props = defineProps<{
   bgSrc: string;
   // transitionY: number
 }>();
-console.log("slide-item", props, props.index);
+// console.log("slide-item", props, props.index);
 function getRandomColor() {
   var r = Math.floor(Math.random() * 256); // 生成 0 到 255 之间的随机整数
   var g = Math.floor(Math.random() * 256);

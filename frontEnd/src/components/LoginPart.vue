@@ -1,19 +1,35 @@
 <script setup lang="ts">
+import { reactive } from "vue";
 import LoginInput from "./LoginInput.vue";
 import MainButton from "./button/MainButton.vue";
-
-import { reactive } from "vue";
 import { ModalStatus } from "@/types/components";
+import { login } from "@/request/server/user";
+
+import { closeModalBusKey,loginBusKey } from "@/components/busKey";
+
+import { useThrottleFn, useStorage, useEventBus } from "@vueuse/core";
 
 const emit = defineEmits<{
   (e: "changeStatus", status: ModalStatus): void;
 }>();
+const closeModalBus = useEventBus(closeModalBusKey);
+const loginBus=useEventBus(loginBusKey)
 const userInfo = reactive({
-  username: "",
+  email: "",
   password: "",
 });
+const handleLogin = useThrottleFn(async () => {
+  if (userInfo.email === "" || userInfo.password === "") {
+    alert("密码或邮箱为空");
+    return;
+  }
+  const res = await login(userInfo);
+  localStorage.removeItem("token");
+  const token = useStorage("token", res!.access_token);
+  loginBus.emit()
+  closeModalBus.emit();
+});
 
-function handleLogin() {}
 function changeStatus() {
   emit("changeStatus", "register");
 }
@@ -37,7 +53,7 @@ function changeStatus() {
     </div>
     <div>
       <div class="input-wrapper">
-        <LoginInput v-model="userInfo.username" placeholder="用户名" />
+        <LoginInput v-model="userInfo.email" placeholder="邮箱" />
       </div>
       <div class="input-wrapper">
         <LoginInput
