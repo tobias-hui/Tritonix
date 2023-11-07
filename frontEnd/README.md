@@ -1,18 +1,20 @@
-# Vue 3 + TypeScript + Vite
+# Tritonix FE
+## 技术栈
+vue3.2、vite、typescript
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 启动
+`npm i` 安装依赖
+`npm run dev` 启动开发服务器
 
-## Recommended IDE Setup
+## 上下滑动
+支持鼠标点击上下拖动切换与键盘方向键切换
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+视频使用列表渲染，往下滑动时监测当前显示的index与总长度，接近总长度时执行loadMore获取更多视频。
 
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+拖动时记录起始位置与结束位置，差距大于某一临界值时执行上下滑动逻辑，每个视频通过定位来放到各自的位置，可视区域通过translate来滑动
+```typescript
+function getDistance(index: number) {
+  // 滑动到整数倍视频模块高度
+  return -index * slideState.wrapper.height;
+}
+```
