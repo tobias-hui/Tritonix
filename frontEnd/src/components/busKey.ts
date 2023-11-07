@@ -6,3 +6,5 @@ export const openModalBusKey: EventBusKey<{ type: ModalStatus }> =
   Symbol("openModalBusKey");
 export const closeModalBusKey =
   Symbol("closeModalBusKey");
+
+export const loginBusKey = Symbol('loginBusKey')

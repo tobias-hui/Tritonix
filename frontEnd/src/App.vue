@@ -35,6 +35,12 @@ import VerticalSlider from "@/components/slider/VerticalSlider.vue";
 import useOffsetPagination from "./demo/useOffsetPagination.vue";
 import LeftSideBar from "@/components/sideBar/LeftSideBar.vue";
 import TopBar from "@/components/topBar/TopBar.vue";
+
+import { useTitle ,useFavicon} from "@vueuse/core";
+
+const title=useTitle('Tritonix')
+const icon=useFavicon()
+icon.value='http://cdn.tritonix.xyz/logo.png'
 </script>
 
 <style scoped lang="scss">

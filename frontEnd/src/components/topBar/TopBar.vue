@@ -1,12 +1,34 @@
 <script setup lang="ts">
 // 引入logo图片
 import logo from "@/assets/logo.png"; // @ 是 src/ 目录的别名
-import { useEventBus } from "@vueuse/core";
-import { reactive } from "vue";
+import { useEventBus, useStorage } from "@vueuse/core";
+import { reactive, watch, ref, onMounted } from "vue";
 
 import { openModalBusKey } from "@/components/busKey";
+import { getUserInfo } from "@/request/server/user";
+import { loginBusKey } from "@/components/busKey";
+import { UserInfo } from "@/types/user";
+import UserInfoBox from "./UserInfoBox.vue";
 
 const openModalBus = useEventBus(openModalBusKey);
+const loginBus = useEventBus(loginBusKey);
+const userInfoRef = ref<UserInfo | null>(null);
+
+loginBus.on(() => {
+  getInfo();
+});
+onMounted(() => {
+  getInfo();
+});
+function getInfo() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+  getUserInfo().then((res) => {
+    if (!res) return;
+    userInfoRef.value = res;
+    localStorage.setItem("user-info", JSON.stringify(res));
+  });
+}
 
 function handleClickRegister() {
   openModalBus.emit({ type: "register" });
@@ -45,8 +67,15 @@ const screen = reactive({
         </button>
       </div>
       <!-- 登录和注册按钮（根据你的需求添加） -->
-      <button class="signup-button" @click="handleClickRegister">注册</button>
-      <button class="login-button" @click="handleClickLogin">登录</button>
+      <div v-if="!userInfoRef">
+        <button class="signup-button" @click="handleClickRegister">注册</button>
+        <button class="login-button" @click="handleClickLogin">登录</button>
+      </div>
+      <UserInfoBox
+        v-if="userInfoRef"
+        :src="'http://cdn.tritonix.xyz/logo.png'"
+        :user-name="userInfoRef.username"
+      ></UserInfoBox>
     </div>
   </div>
 </template>
