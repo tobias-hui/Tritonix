@@ -28,7 +28,7 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
 .top-bar {
   width: 100%;
   height: 120px;
-  background-color: #191919; /* 背景色 */
+  background-color: rgba(25, 25, 25, 0.9); /* 背景色 */
   display: flex;
   justify-content: center;
   align-items: center;

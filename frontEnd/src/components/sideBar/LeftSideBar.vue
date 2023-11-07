@@ -86,7 +86,7 @@ const selectItem = (itemName: string) => {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content:start;
-  background-color: #191919; /* 侧边栏背景色 */
+  background-color: rgba(25, 25, 25, 0.9);  
 }
 
 .sidebar-container {
