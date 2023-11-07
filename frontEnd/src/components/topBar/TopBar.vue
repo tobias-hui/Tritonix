@@ -1,7 +1,19 @@
 <script setup lang="ts">
 // 引入logo图片
 import logo from "@/assets/logo.png"; // @ 是 src/ 目录的别名
+import { useEventBus } from "@vueuse/core";
 import { reactive } from "vue";
+
+import { openModalBusKey } from "@/components/busKey";
+
+const openModalBus = useEventBus(openModalBusKey);
+
+function handleClickRegister() {
+  openModalBus.emit({ type: "register" });
+}
+function handleClickLogin() {
+  openModalBus.emit({ type: "login" });
+}
 const screen = reactive({
   width: window.innerWidth,
   height: window.innerHeight,
@@ -33,8 +45,8 @@ const screen = reactive({
         </button>
       </div>
       <!-- 登录和注册按钮（根据你的需求添加） -->
-      <button class="signup-button">注册</button>
-      <button class="login-button">登录</button>
+      <button class="signup-button" @click="handleClickRegister">注册</button>
+      <button class="login-button" @click="handleClickLogin">登录</button>
     </div>
   </div>
 </template>
