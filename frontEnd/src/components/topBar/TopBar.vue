@@ -41,10 +41,10 @@ const screen = reactive({
 
 <style scoped lang="scss">
 .top-bar {
-  // width: 100%;
+  width: 100%;
   overflow: hidden;
   box-sizing: border-box;
-  height: 120px;
+  height: 100px;
   background-color: rgba(25, 25, 25, 0.9); /* 背景色 */
   display: flex;
   justify-content: center;
@@ -61,7 +61,7 @@ const screen = reactive({
   padding: 10px 30px; /* 内边距 */
   // box-sizing: border-box;
   width: 82%;
-  height: 48px;
+  height: 36px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* 根据需要添加更多的样式，如阴影等 */
 }
@@ -71,9 +71,9 @@ const screen = reactive({
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 500px;
-  width: 600px; /* 设置宽度为70% */
-  height: 92%;
+  margin-right: 200px;
+  width: 260px; /* 设置宽度为70% */
+  height: 86%;
   position: relative;
   //max-width: 600px; /* 你可以设置一个最大宽度 */
 }
@@ -81,7 +81,7 @@ const screen = reactive({
 /* 搜索框样式 */
 .search-box {
   padding: 8px 16px;
-  min-width: 200px;
+  min-width: 160px;
   background-color: #242424; /* 搜索框背景颜色 */
   border: 2px solid #ffffff; /* 搜索框边框颜色 */
   border-radius: 14px; /* 圆角边框 */
@@ -117,13 +117,13 @@ const screen = reactive({
 }
 
 .logo {
-  height: 70px; /* 或者你希望的任何尺寸 */
+  height: 50px; /* 或者你希望的任何尺寸 */
   margin-right: 10px; /* logo和文字之间的间距 */
 }
 
 .brand {
   color: white;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400; /* 设置字体字重为普通 */
   font-family: "Microsoft YaHei", "微软雅黑", "Heiti SC", "黑体", sans-serif; /* 设置字体 */
   margin-right: auto;
@@ -132,7 +132,7 @@ const screen = reactive({
 }
 
 .signup-button {
-  margin-left: 10px;
+  margin-left: 12px;
   padding: 5px 15px;
   background-color: #242424;
   color: #ffffff; /* 登录文字颜色 */
@@ -147,8 +147,8 @@ const screen = reactive({
 }
 
 .login-button {
-  margin-left: 10px;
-  padding: 5px 15px;
+  margin-left: 2px;
+  padding: 5px 12px;
   background-color: #242424; /* 按钮背景颜色 */
   color: #caff33; /* 登录文字颜色 */
   font-weight: 400; /* 设置字体字重为普通 */

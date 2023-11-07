@@ -10,10 +10,10 @@ const sideList = reactive([
     name: "推荐",
     url: "/",
   },
-  // {
-  //   name: "知识",
-  //   url: "/",
-  // },
+  {
+    name: "知识",
+    url: "/",
+  },
   {
     name: "体育",
     url: "/sports",
@@ -63,7 +63,7 @@ const selectItem = (itemName: string) => {
 
       <!-- 插入的图片 -->
       <a href="https://colingo.ai/copilot/22e2bdc21c3a35ade2ec" class="image-link">
-        <!-- <img src="@/assets/toothless.png" alt="Toothless" class="sidebar-image"> -->
+      <img src="@/assets/toothless.png" alt="Toothless" class="sidebar-image">
         <!-- 图片下方的文字 -->
         <span class="image-text">Tritonix AI</span>
       </a>
@@ -81,7 +81,7 @@ const selectItem = (itemName: string) => {
 
 <style scoped lang="scss">
 .side-bar {
-  width:200px;
+  width:160px;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -96,7 +96,7 @@ const selectItem = (itemName: string) => {
   justify-content: space-between;
   background-color: #1C1C1C;
   border-radius: 36px; /* 容器圆角 */
-  width: 80%; /* 与侧边栏同宽 */
+  width: 75%; /* 与侧边栏同宽 */
   height: 96%;
   margin-top: 20px; /* 与顶部栏的距离 */
   margin: auto;
@@ -111,12 +111,12 @@ const selectItem = (itemName: string) => {
   background-color: #242424 !important; /* 按钮背景色 */
   border-radius: 24px; /* 按钮圆角 */
   color: #FFFFFF; /* 按钮文字颜色 */
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400; /* 设置字体字重为普通 */
   font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif;
-  margin: 12px auto; /* 修改为 'auto' 实现水平居中 */
+  margin: 6px auto; /* 修改为 'auto' 实现水平居中 */
   padding: 10px 0; /* 按钮上下内边距 */
-  width: 60%; /* 按钮宽度 */
+  width: 48%; /* 按钮宽度 */
   height: 4%;
   text-align: center; /* 文字居中 */
   cursor: pointer; /* 鼠标悬停时的指针样式 */
@@ -143,14 +143,14 @@ const selectItem = (itemName: string) => {
 }
 
 .sidebar-image {
-  max-width: 100%; /* 限制图片最大宽度 */
-  max-height: 220px; /* 增加图片最大高度 */
-  margin-bottom: 16px; /* 在图片和上传按钮之间增加空间 */
+  max-width: 80%; /* 限制图片最大宽度 */
+  max-height: 88px; /* 增加图片最大高度 */
+  margin-bottom: 2px; /* 在图片和上传按钮之间增加空间 */
 }
 
 .image-text {
   color: #CAFF33; /* 文字颜色 */
-  font-size: 24px; /* 文字大小 */
+  font-size: 20px; /* 文字大小 */
   font-weight: 400; /* 设置字体字重为普通 */
   font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif;
   text-align: center; /* 文字居中 */
@@ -162,25 +162,25 @@ const selectItem = (itemName: string) => {
   background-color: #242424; /* 按钮背景色 */
   border-radius: 18px; /* 按钮圆角 */
   width: 70%; /* 按钮宽度 */
-  height: 12%;
+  height: 15%;
   display: flex;
   flex-direction: column; /* 使用flex布局使内容居中 */
   align-items: center; /* 垂直居中 */
   justify-content: center; /* 水平居中 */
-  margin: 12px auto; /* 上下外边距 */
+  margin: 16px auto; /* 上下外边距 */
   margin-top: auto;
   cursor: pointer; /* 鼠标悬停时的指针样式 */
 }
 
 .icon {
   fill: white; /* SVG图标颜色 */
-  width: 80px; /* SVG图标宽度 */
-  height: 80px; /* SVG图标高度 */
+  width: 35px; /* SVG图标宽度 */
+  height: 35px; /* SVG图标高度 */
   margin-bottom: 4px;
 }
 .upload-text {
   color: white; /* 文字颜色 */
-  font-size: 16px; /* 文字大小 */
+  font-size: 12px; /* 文字大小 */
   font-weight: 400; /* 设置字体字重为普通 */
   font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif;
   text-align: center; /* 文字居中 */
