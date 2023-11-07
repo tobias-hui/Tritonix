@@ -1,13 +1,16 @@
 <template>
   <div class="container">
     <!-- 背景图片 -->
-    <div class="fullscreen-background"></div>
+    <div class="fullscreen-background" :style="{
+      width:`${screen.width}px`,
+      height:`${screen.height}px`
+    }"></div>
 
     <!-- 页面顶部的栏位 -->
     <slot name="topBar"></slot>
 
     <!-- 页面主体的布局 -->
-    <div style="width: 100%; flex: 1; display: flex;">
+    <div style="width: 100%; flex: 1; display: flex">
       <!-- 侧边栏 -->
       <slot name="leftBar"></slot>
       <!-- 主容器 -->
@@ -17,7 +20,12 @@
 </template>
 
 <script setup lang="ts">
-// TypeScript脚本（如果有需要）
+import {reactive} from 'vue'
+const screen = reactive({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
+
 </script>
 
 <style scoped lang="scss">
@@ -30,12 +38,12 @@
 }
 
 .fullscreen-background {
-  position: absolute; /* 绝对定位 */
+  position: fixed; /* 绝对定位 */
   top: 0;
   left: 0;
   width: 100%; /* 背景宽度 */
   height: 100%; /* 背景高度 */
-  background: url('@/assets/background.png') no-repeat center center; 
+  background: url("@/assets/background.png") no-repeat center center;
   background-size: cover; /* 背景图片覆盖整个元素 */
   z-index: -1; /* 确保背景在内容之下 */
 }

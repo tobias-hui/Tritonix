@@ -10,10 +10,10 @@ const sideList = reactive([
     name: "推荐",
     url: "/",
   },
-  {
-    name: "知识",
-    url: "/",
-  },
+  // {
+  //   name: "知识",
+  //   url: "/",
+  // },
   {
     name: "体育",
     url: "/sports",
@@ -22,14 +22,14 @@ const sideList = reactive([
     name: "宠物",
     url: "/pet",
   },
-  {
-    name: "娱乐",
-    url: "/",
-  },
-  {
-    name: "美食",
-    url: "/",
-  },
+  // {
+  //   name: "娱乐",
+  //   url: "/",
+  // },
+  // {
+  //   name: "美食",
+  //   url: "/",
+  // },
   {
     name: "二次元",
     url: "/Otaku",
@@ -63,7 +63,7 @@ const selectItem = (itemName: string) => {
 
       <!-- 插入的图片 -->
       <a href="https://colingo.ai/copilot/22e2bdc21c3a35ade2ec" class="image-link">
-        <img src="@/assets/toothless.png" alt="Toothless" class="sidebar-image">
+        <!-- <img src="@/assets/toothless.png" alt="Toothless" class="sidebar-image"> -->
         <!-- 图片下方的文字 -->
         <span class="image-text">Tritonix AI</span>
       </a>
@@ -81,7 +81,7 @@ const selectItem = (itemName: string) => {
 
 <style scoped lang="scss">
 .side-bar {
-  width: 10%;
+  width:200px;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
