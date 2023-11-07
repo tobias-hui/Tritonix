@@ -11,6 +11,7 @@ import {
 import { useRouter, useRoute } from "vue-router";
 // component
 import VerticalSlider from "@/components/slider/VerticalSlider.vue";
+import LoadingPage from "@/components/LoadingPage.vue";
 // type
 import { VideoInformation, VideoInfo } from "@/types/video";
 // request
@@ -21,26 +22,32 @@ import { getRecommendVideo } from "@/request/mock/video";
 const dataList = reactive<VideoInformation[]>([]);
 const pageState = reactive({
   category: "",
-  currentPage: 1,
+  currentPage: 0,
   size: 10,
 });
 const refreshKeyRef = ref(true);
+const isLoading = ref(false);
 const router = useRouter();
 router.afterEach(async (to, from, failure) => {
   console.log(to.name);
   pageState.category = to.name as string;
   pageState.currentPage = 0;
+  isLoading.value = true;
   // 销毁slider重新渲染
   refreshKeyRef.value = false;
-  dataList.splice(0,dataList.length)
+  dataList.splice(0, dataList.length);
   await loadVideo();
+  isLoading.value = false;
   refreshKeyRef.value = true;
 });
 // const route = useRoute();
 // pageState.category = route.fullPath.slice(1);
 pageState.category = router.currentRoute.value.name as string;
 onMounted(async () => {
-  loadVideo();
+  isLoading.value = true;
+  loadVideo().finally(() => {
+    isLoading.value = false;
+  });
 });
 async function loadVideo() {
   let res: VideoInformation[] | undefined;
@@ -68,14 +75,17 @@ async function loadVideo() {
 function handleLoadMore() {
   console.log("loadMore");
   pageState.currentPage++;
-  loadVideo();
+  // isLoading.value = true;
+  loadVideo()
 }
 </script>
 
 <template>
   <div class="home">
+    <LoadingPage v-show="isLoading" />
     <VerticalSlider
       v-if="refreshKeyRef"
+      v-show="!isLoading"
       :data-list="dataList"
       @load-more="handleLoadMore"
     ></VerticalSlider>

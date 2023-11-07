@@ -3,7 +3,7 @@
 <template>
   <div
     :style="{
-      backgroundColor: '#F1F3F4',
+      backgroundColor: 'transparent',
       flex: 1,
     }"
   >

@@ -1,10 +1,21 @@
 <script setup lang="ts">
 // 引入logo图片
-import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
+import logo from "@/assets/logo.png"; // @ 是 src/ 目录的别名
+import { reactive } from "vue";
+const screen = reactive({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
 </script>
 
 <template>
-  <div class="top-bar">
+  <div
+    class="top-bar"
+    :style="{
+      width: `${screen.width}px`,
+      // height: `${screen.height}px`,
+    }"
+  >
     <div class="bar-container">
       <!-- Logo图片 -->
       <img :src="logo" alt="Logo" class="logo" />
@@ -12,7 +23,11 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
       <span class="brand">Tritonix 潮汐智螈</span>
       <!-- 搜索框和放大镜图标 -->
       <div class="search-container">
-        <input type="text" class="search-box" placeholder="搜索你感兴趣的内容" />
+        <input
+          type="text"
+          class="search-box"
+          placeholder="搜索你感兴趣的内容"
+        />
         <button class="search-button">
           <img src="@/assets/search.svg" alt="搜索" />
         </button>
@@ -26,7 +41,9 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
 
 <style scoped lang="scss">
 .top-bar {
-  width: 100%;
+  // width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
   height: 120px;
   background-color: rgba(25, 25, 25, 0.9); /* 背景色 */
   display: flex;
@@ -37,10 +54,12 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
 .bar-container {
   display: flex;
   align-items: center;
+  gap: 20px;
   justify-content: space-between;
   background-color: #242424; /* 你可以根据需要更改这个颜色 */
   border-radius: 36px; /* 圆角的大小 */
   padding: 10px 30px; /* 内边距 */
+  // box-sizing: border-box;
   width: 82%;
   height: 48px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -62,12 +81,13 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
 /* 搜索框样式 */
 .search-box {
   padding: 8px 16px;
+  min-width: 200px;
   background-color: #242424; /* 搜索框背景颜色 */
-  border: 2px solid #FFFFFF; /* 搜索框边框颜色 */
+  border: 2px solid #ffffff; /* 搜索框边框颜色 */
   border-radius: 14px; /* 圆角边框 */
   font-size: 16px; /* 文本大小 */
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #FFFFFF; /* 输入文本颜色 */
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #ffffff; /* 输入文本颜色 */
   outline: none; /* 移除焦点轮廓 */
   width: 100%; /* 宽度 - 可根据需要调整 */
   //max-width: 300px; /* 最大宽度 */
@@ -91,7 +111,6 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
   height: 20px; /* 图标大小 */
 }
 
-
 .logo-container {
   display: flex;
   align-items: center;
@@ -106,8 +125,9 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
   color: white;
   font-size: 24px;
   font-weight: 400; /* 设置字体字重为普通 */
-  font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif; /* 设置字体 */
+  font-family: "Microsoft YaHei", "微软雅黑", "Heiti SC", "黑体", sans-serif; /* 设置字体 */
   margin-right: auto;
+  white-space: nowrap;
   /* 其他你需要的样式 */
 }
 
@@ -115,9 +135,9 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
   margin-left: 10px;
   padding: 5px 15px;
   background-color: #242424;
-  color: #FFFFFF; /* 登录文字颜色 */
+  color: #ffffff; /* 登录文字颜色 */
   font-weight: 400; /* 设置字体字重为普通 */
-  font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif;
+  font-family: "Microsoft YaHei", "微软雅黑", "Heiti SC", "黑体", sans-serif;
   border: 2px solid #242424; /* 边框颜色和大小 */
   border-radius: 30px;
   cursor: pointer;
@@ -130,15 +150,14 @@ import logo from '@/assets/logo.png'; // @ 是 src/ 目录的别名
   margin-left: 10px;
   padding: 5px 15px;
   background-color: #242424; /* 按钮背景颜色 */
-  color: #CAFF33; /* 登录文字颜色 */
+  color: #caff33; /* 登录文字颜色 */
   font-weight: 400; /* 设置字体字重为普通 */
-  font-family: 'Microsoft YaHei', '微软雅黑', 'Heiti SC', '黑体', sans-serif;
-  border: 2px solid #CAFF33; /* 边框颜色和大小 */
+  font-family: "Microsoft YaHei", "微软雅黑", "Heiti SC", "黑体", sans-serif;
+  border: 2px solid #caff33; /* 边框颜色和大小 */
   border-radius: 30px;
   cursor: pointer;
   &:hover {
     background-color: #656567; /* 按钮悬停效果颜色 */
   }
 }
-
 </style>

@@ -49,6 +49,7 @@ const colorRef = ref(getRandomColor());
         backgroundRepeat:'no-repeat',
         backgroundSize:'cover',
         filter: 'blur(40px)',
+        backgroundColor:'#43423F'
       }"
     />
     <video-player
