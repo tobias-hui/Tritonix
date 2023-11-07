@@ -1,7 +1,7 @@
 import instance from "../instance";
 import { UserInfo } from "@/types/user";
 
-type RegisterProps = {
+export type RegisterProps = {
   email: string
   username: string
   avatar: string
